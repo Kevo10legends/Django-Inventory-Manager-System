@@ -1,0 +1,52 @@
+{% extends "inventory/base.html" %}
+{% block title %}Sales List{% endblock %}
+{% block content %}
+
+<nav>
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+
+        <li class="page-item">
+            <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        </li>
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+
+<h1 class="text-center">Sales List</h1>
+<a href="{% url 'add_sale' %}" class="btn btn-primary mb-3">Add New Sale</a>
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Product</th>
+            <th>Quantity Sold</th>
+            <th>Date</th>
+            <th>Customer Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for sale in sales %}
+        <tr>
+            <td>{{ sale.product.name }}</td>
+            <td>{{ sale.quantity_sold }}</td>
+            <td>{{ sale.date|date:"Y-m-d H:i" }}</td>
+            <td>{{ sale.customer_name|default:"N/A" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" class="text-center">No sales found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
